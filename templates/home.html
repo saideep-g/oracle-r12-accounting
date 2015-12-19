@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block body_block %}
+	<h1>Oracle Accounting</h1>
+
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          P2P Accounting
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+       Procure to Pay (P2P) has many flows and the accounting differs based on setups and type of transactions.
+        <br> 
+        <a href = '/p2p_accounting/' class ='btn btn-primary text-center'> Explore Accounting</a>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          O2C Accounting
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body">
+       Order to Cash (O2C) have varied process to adapt business processes. There is robust auto-accounting functionality which helps to drive accounting of AR Invoice. 
+        <br> 
+        <a href = '#' class ='btn btn-primary text-center'> Explore Accounting</a>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Inventory Accounting
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body">
+        Inventory accounting is the easiest to learn because of less events and consistency. Learn Inventory Accounting
+        <br> 
+        <a href = '#' class ='btn btn-primary text-center'> Explore Accounting</a>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+    {% block title %} P2P Accounting {% endblock %}
+
+    {% block upper_side_block %}
+        <div>
+         <form id = 'form_filter' class="form-horizontal" method="post" action="/p2p_accounting/?">
+            {% csrf_token %} {{form.item_type.choices}}
+            {{form.as_p}}  <br>
+            <div id = 'error_message'> </div>
+            <input type="submit" class =' btn btn-primary' name="submit" value="Submit" />
+            <p> </p>
+        </form>
+        </div>
+                    {%  comment%}
+                        # Render form manually - label and the field
+                        {{ form.period_end_accrual.label_tag }}
+                        {{form.period_end_accrual}}
+                    {%endcomment %}
+    {% endblock %}
+
+
+{% block body_block %}
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">'Inventory Item' Type</h4>
+              </div>
+              <div class="modal-body">
+                For an Inventory Item, we cannot enable "Period-end Accrual".
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Got It !</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title" style="font-size:20px">P2P Accounting</h2>
+        </div>
+     </div>
+    <div id = 'options'>
+
+    </div>
+
+    <div id = 'main-container'>
+
+        <div id = 'accounting_enty'>
+            <div id = 'header'> </div>
+            <div id = 'entry'>
+                <div class="panel panel-primary">
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">PO Receipt</h3>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            {% if po_receipt_accting%}
+                                {% include "p2p/p2p_accting_header.html"%}
+
+                                {% for entry in po_receipt_accting %}
+                                    {% include "p2p/p2p_accting_entry.html"%}
+                                {% endfor %}
+                            {%else%}
+                                {% include "no_accounting.html" %}
+                            {%endif%}
+                        </table>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">PO Deliver</h3>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            {% if po_receipt_accting%}
+                                {% include "p2p/p2p_accting_header.html"%}
+                                {% for entry in po_deliver_accting %}
+                                    {% include "p2p/p2p_accting_entry.html"%}
+                                {% endfor %}
+                            {%else%}
+                                {% include "no_accounting.html" %}
+                            {%endif%}
+                        </table>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">AP Invoice</h3>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            {% include "p2p/p2p_accting_header.html"%}
+                            {% for entry in ap_invoice_accting %}
+                                     {% include "p2p/p2p_accting_entry.html"%}
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">AP Payment</h3>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            {% include "p2p/p2p_accting_header.html"%}
+                                        {% for entry in ap_payment_accting %}
+                                                                                                {% include "p2p/p2p_accting_entry.html"%}
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">AP Payment Reconciliation</h3>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            {% if ap_payment_recon_accting%}
+                                {% include "p2p/p2p_accting_header.html"%}
+                                        {% for entry in ap_payment_recon_accting %}
+                                                                    {% include "p2p/p2p_accting_entry.html"%}
+                                        {% endfor %}
+                            {%else%}
+                                {% include "no_accounting.html" %}
+                            {%endif%}
+                        </table>
+                    </div>
+                </div>
+                </div>
+            </div>  <!-- id =accounting_entry-->
+    </div>
+{% endblock %}

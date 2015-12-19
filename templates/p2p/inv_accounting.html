@@ -1,0 +1,10 @@
+{% extends 'p2p/p2p_accounting.html' %}
+
+{% load staticfiles %}
+
+			{% block item_type%}
+			 <select class="form-control">
+				  <option>Expense</option>
+				  <option selected="selected">Inventory</option>
+			</select>
+			{%endblock%}
