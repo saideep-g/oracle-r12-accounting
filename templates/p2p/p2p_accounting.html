@@ -39,11 +39,26 @@
             </div>
           </div>
         </div>
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h2 class="panel-title" style="font-size:20px">P2P Accounting</h2>
-        </div>
-     </div>
+             <ul class="nav nav-tabs">
+                  <li role="presentation" class="active">
+                            <div style="font-size:22px; padding: 10px 0px 5px; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+                            font-weight: 500;"> Procure to Pay (P2P) Accounting </div>
+                  </li>
+                  <li role="presentation" class = 'pull-right'><a id = 'add-field' href="#">Additional Fields</a></li>
+            </ul>
+            <!-- Additional fields block; Not displayed by default-->
+            <div class="form-inline style" id = 'add-field-form' style= 'margin: 2px 2px; display: none;'  >
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="journal-source" value="option1" checked="checked"> Journal Source
+                        </label>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="defaults-from" value="option2"> Defaults from
+                        </label>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="accting-class" value="option3"> Accounting Class
+                        </label>
+                        <input type="submit" id = 'add-field-form-btn'  class =' btn btn-success' name="submit" value="Add/Remove" />
+            </div>
     <div id = 'options'>
 
     </div>
@@ -88,7 +103,7 @@
                     </div>
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <h3 class="panel-title">AP Invoice</h3>
+                            <h3 class="panel-title">AP Invoice <small> When matched with PO/Receipt</small></h3>
                         </div>
                         <table class="table table-bordered table-hover">
                             {% include "p2p/p2p_accting_header.html"%}
@@ -123,8 +138,29 @@
                             {%endif%}
                         </table>
                     </div>
+
+
+                    <!-- Period End Accrual -->
+                    <div> {% if po_pe_accrual_accting %}
+                    <hr>
+                    <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">PO Receipt Accruals - Period End <small> For Uninvoiced Receipts</small></h3>
+                            </div>
+                            <table class="table table-bordered table-hover">
+                                    {% include "p2p/p2p_accting_header.html"%}
+                                            {% for entry in po_pe_accrual_accting %}
+                                                                        {% include "p2p/p2p_accting_entry.html"%}
+                                            {% endfor %}
+
+                            </table>
+                        </div>
+                        <p style="padding-left:8px;"> As soon as the next period is opened, <strong> Purchasing</strong> reverses the above accrual entry.</p>
+                        {%endif%}
+                    </div> <!-- Period End Accrual Accounting Entry-->
                 </div>
                 </div>
-            </div>  <!-- id =accounting_entry-->
+             </div>
+        </div>  <!-- id =accounting_entry-->
     </div>
 {% endblock %}
