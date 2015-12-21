@@ -51,3 +51,11 @@ $('.sidebar-toggle').click(function(event) {
 	}
 
 });
+// Scripts to open Screenshot Modal
+$('#pe-accrual-btn').click(function(event) {
+	$('#period-end-accrual-modal').modal('show');
+});
+
+$('#allow-recon-accting-btn').click(function(event) {
+	$('#when-pymt-clrs-modal').modal('show');
+});

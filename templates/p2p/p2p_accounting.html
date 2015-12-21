@@ -6,18 +6,36 @@
     {% block upper_side_block %}
         <div>
          <form id = 'form_filter' class="form-horizontal" method="post" action="/p2p_accounting/?">
-            {% csrf_token %} {{form.item_type.choices}}
-            {{form.as_p}}  <br>
-            <div id = 'error_message'> </div>
+            {% csrf_token %}
+                <p>
+                    {{ form.item_type.errors }}
+                    {{ form.item_type.label_tag }}
+                        <a id = 'item-type-btn' class = 'pull-right'> <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                        </a>
+                    {{ form.item_type }}
+                </p>
+
+                <p>
+                    {{ form.period_end_accrual.errors }}
+                    {{ form.period_end_accrual.label_tag }}
+                        <a id = 'pe-accrual-btn' class = 'pull-right'> <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                        </a>
+                    {{ form.period_end_accrual }}
+                </p>
+
+                <p>
+                    {{ form.allow_recon_accounting.errors }}
+                    {{ form.allow_recon_accounting.label_tag }}
+                        <a id = 'allow-recon-accting-btn' class = 'pull-right'> <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                        </a>
+                    {{ form.allow_recon_accounting }}
+                </p>
+           <!-- Disabled <div id = 'error_message'> </div> -->
             <input type="submit" class =' btn btn-primary' name="submit" value="Submit" />
             <p> </p>
+
         </form>
         </div>
-                    {%  comment%}
-                        # Render form manually - label and the field
-                        {{ form.period_end_accrual.label_tag }}
-                        {{form.period_end_accrual}}
-                    {%endcomment %}
     {% endblock %}
 
 
@@ -41,8 +59,8 @@
         </div>
              <ul class="nav nav-tabs">
                   <li role="presentation" class="active">
-                            <div style="font-size:22px; padding: 10px 0px 5px; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
-                            font-weight: 500;"> Procure to Pay (P2P) Accounting </div>
+                            <h1 style="font-size:22px; padding: 10px 0px 5px; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+                            font-weight: 500; margin: 0px 0px;"> Procure to Pay (P2P) Accounting </h1>
                   </li>
                   <li role="presentation" class = 'pull-right'><a id = 'add-field' href="#">Additional Fields</a></li>
             </ul>
@@ -155,7 +173,7 @@
 
                             </table>
                         </div>
-                        <p style="padding-left:8px;"> As soon as the next period is opened, <strong> Purchasing</strong> reverses the above accrual entry.</p>
+                        <p class="text-muted" style="padding-left:8px;"> As soon as the next period is opened, <strong> Purchasing</strong> reverses the above accrual entry.</p>
                         {%endif%}
                     </div> <!-- Period End Accrual Accounting Entry-->
                 </div>
@@ -163,4 +181,7 @@
              </div>
         </div>  <!-- id =accounting_entry-->
     </div>
+    <!-- Include BS Model -->
+     {% include "p2p/acct_derivation.html"%}
+     {% include 'p2p/screen_shots.html'%}
 {% endblock %}
