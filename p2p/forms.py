@@ -9,7 +9,7 @@ class P2PForm(forms.Form):
         choices=ITEM_TYPES,
         widget = forms.Select(  attrs={'class': 'form-control'}))
 
-    period_end_accrual = forms.ChoiceField(label = 'Period End Accrual',  initial='At Receipt', required= False,
+    period_end_accrual = forms.ChoiceField(label = 'Item Accrual',  initial='At Receipt', required= False,
         choices= PERIOD_END_ACCRUAL,
         widget = forms.Select (attrs={'class': 'form-control'},
                                                        ))

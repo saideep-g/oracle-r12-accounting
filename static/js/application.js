@@ -1,6 +1,6 @@
 
 $("#form_filter").submit(function() {
-      if ($('#id_item_type').val() == 'Inventory'  & $('#id_period_end_accrual').val()=='True') {
+      if ($('#id_item_type').val() == 'Inventory'  & $('#id_period_end_accrual').val()=='Period End') {
         //$('#error_message').text ('For an Inventory Item, we cannot enable "Period-end Accrual"');
         $('#myModal').modal('show');
         return false;
@@ -58,4 +58,8 @@ $('#pe-accrual-btn').click(function(event) {
 
 $('#allow-recon-accting-btn').click(function(event) {
 	$('#when-pymt-clrs-modal').modal('show');
+});
+
+$('#item-type-btn').click(function(event) {
+	$('#item-type-modal').modal('show');
 });

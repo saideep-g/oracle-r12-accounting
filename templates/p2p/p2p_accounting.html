@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 
 {% load staticfiles %}
-    {% block title %} P2P Accounting {% endblock %}
+    {% block title %} Procure to Pay (P2P)  Process & Accounting Entries - Oracle Apps {% endblock %}
 
     {% block upper_side_block %}
+    <ul class="nav nav-tabs nav-justified">
+      <li role="presentation" class="active">
+        <a href="#" style = 'padding: 10px 10px 5px 0px; margin-bottom: 10px;background-color: #fff;'><strong> Average Costing </strong></a></li>
+      <li role="presentation" ><a href="#" style = 'padding: 10px 0px 5px 10px;margin-bottom: 10px'> <strong> Standard Costing</strong></a></li>
+    </ul>
         <div>
          <form id = 'form_filter' class="form-horizontal" method="post" action="/p2p_accounting/?">
             {% csrf_token %}
@@ -46,10 +51,10 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">'Inventory Item' Type</h4>
+                <h4 class="modal-title" id="myModalLabel">'Inventory Item' Accrual @ <strong> Purchasing Options </strong> </h4>
               </div>
               <div class="modal-body">
-                For an Inventory Item, we cannot enable "Period-end Accrual".
+                Inventory Item <span class="label label-danger" style= 'font-size: 100%'> cannot</span> be accrued at Period End. It can be accrued <strong> 'At Receipt'</strong> only.
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Got It !</button>
