@@ -58,7 +58,7 @@ def p2p_accounting(request):
     invoice_accting = (field for field in p2p_accting_list if (field['accounting_entry']=='AP Invoice' and
                                                             field ['period_end_accrual']==period_end_accrual_val and
                                                             (field['item_type']==item_type_val or
-                                                                field['item_type']=='Not Relevant')
+                                                                field['item_type']=='Not Relevant') and field ['accounting_class'] !='IPV'
                                                             ) )
     payment_accting = (field for field in p2p_accting_list  if (field['accounting_entry']=='AP Payment' and
                                                             field ['allow_recon_accounting']==allow_recon_accounting
@@ -73,6 +73,67 @@ def p2p_accounting(request):
                                                             ) )
      #list_accounting =  (d for d in list_accounting_expense if d['accounting_entry']=='PO Receipt' )
     return render(request, 'p2p/p2p_accounting.html',
+        {'po_receipt_accting': receipt_accting, 'po_deliver_accting' : deliver_accting,
+        'ap_invoice_accting':invoice_accting, 'ap_payment_accting':payment_accting,
+        'ap_payment_recon_accting': recon_accting,'po_pe_accrual_accting': pe_accrual_accting,
+        'form': form})
+
+def ipv_accounting(request):
+    # A HTTP POST?
+    if request.method == 'POST':
+        form = P2PForm(request.POST)
+        if form.is_valid(): # All validation rules pass
+            item_type_val = form.cleaned_data ['item_type']
+            period_end_accrual_val = form.cleaned_data ['period_end_accrual']
+            allow_recon_accounting = form.cleaned_data ['allow_recon_accounting']
+
+            # setting allow recon accounting as a Boolean
+            if  allow_recon_accounting == 'True':
+                allow_recon_accounting  = True
+            else:
+                allow_recon_accounting  = False
+
+
+        else:
+            #this is fallback and usually not used since we are using 'Choices' in our form
+            item_type_val ='Expense'
+            period_end_accrual_val ='At Receipt'
+            allow_recon_accounting = False
+
+    else:
+        #Initial load when the request != POST (e.g. GET)
+        form=P2PForm()
+        #setting form variables to default values for a != POST (e.g. GET request)
+        item_type_val ='Expense'
+        period_end_accrual_val ='At Receipt'
+        allow_recon_accounting = False
+
+    print(period_end_accrual_val)
+    receipt_accting=  tuple(field for field in p2p_accting_list if ( field['accounting_entry']=='PO Receipt' and
+                                                            field['item_type']==item_type_val and
+                                                            field['period_end_accrual']== period_end_accrual_val
+                                                            ) )
+    deliver_accting = (field for field in p2p_accting_list  if ( field['accounting_entry']=='PO Deliver' and
+                                                            field['item_type']==item_type_val
+                                                            ) )
+    invoice_accting = (field for field in p2p_accting_list if (field['accounting_entry']=='AP Invoice' and
+                                                            field ['period_end_accrual']==period_end_accrual_val and
+                                                            (field['item_type']==item_type_val or
+                                                                field['item_type']=='Not Relevant')
+                                                            ) )
+    payment_accting = (field for field in p2p_accting_list  if (field['accounting_entry']=='AP Payment' and
+                                                            field ['allow_recon_accounting']==allow_recon_accounting
+                                                            ) )
+    recon_accting = tuple(field for field in p2p_accting_list  if (field['accounting_entry']=='AP Payment Reco' and
+                                                            field ['allow_recon_accounting']==allow_recon_accounting
+                                                            ) )
+    pe_accrual_accting = tuple(field for field in p2p_accting_list if (
+                                                            field['accounting_entry']=='PO Receipt Accruals - Period End' and
+                                                            field['item_type']==item_type_val and
+                                                            field ['period_end_accrual']==period_end_accrual_val
+                                                            ) )
+     #list_accounting =  (d for d in list_accounting_expense if d['accounting_entry']=='PO Receipt' )
+    return render(request, 'p2p/ipv_accounting.html',
         {'po_receipt_accting': receipt_accting, 'po_deliver_accting' : deliver_accting,
         'ap_invoice_accting':invoice_accting, 'ap_payment_accting':payment_accting,
         'ap_payment_recon_accting': recon_accting,'po_pe_accrual_accting': pe_accrual_accting,
@@ -688,5 +749,21 @@ p2p_accting_list = [
     "accounting_class":"Accrual",
     "notes":"#Check Journal category",
     "period_end_accrual":"Period End"
+  },
+   {
+    "id":39,
+    "dr_cr":"DEBIT",
+    "account_description":"Invoice Price Variance A/c",
+    "accounting_entry":"AP Invoice",
+    "item_type":"Expense",
+    "stream":"",
+    "allow_recon_accounting":0,
+    "oe_line_flow":"Bill Only",
+    "defaults_from":"Organization Parameters",
+    "journal_source":"Payables",
+    "journal_category":"Standard Invoices",
+    "accounting_class":"IPV",
+    "notes":"NA",
+    "period_end_accrual":"At Receipt"
   }
 ]

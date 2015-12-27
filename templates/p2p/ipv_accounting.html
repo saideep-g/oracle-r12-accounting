@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+    {% block title %} Invoice Price Variance (IPV) Accounting - Oracle Applications {% endblock %}
+
+  
+    {% block upper_side_block %}
+      <!--*********
+        <ul class="nav nav-tabs nav-justified">
+      <li role="presentation" class="active">
+        <a href="#" style = 'padding: 10px 10px 5px 0px; margin-bottom: 10px;background-color: #fff;'><strong> Average Costing </strong></a></li>
+      <li role="presentation" ><a href="#" style = 'padding: 10px 0px 5px 10px;margin-bottom: 10px'> <strong> Standard Costing</strong></a></li>
+    </ul>
+
+        <div>
+         <form id = 'form_filter' class="form-horizontal" method="post" action="/p2p_accounting/?">
+            {% csrf_token %} 
+                <p>
+                    {{ form.item_type.errors }}
+                    {{ form.item_type.label_tag }} 
+                        <a id = 'item-type-btn' class = 'pull-right'> <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span> 
+                        </a>
+                    {{ form.item_type }} 
+                </p>
+
+                <p> 
+                    {{ form.period_end_accrual.errors }}
+                    {{ form.period_end_accrual.label_tag }} 
+                        <a id = 'pe-accrual-btn' class = 'pull-right'> <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span> 
+                        </a>
+                    {{ form.period_end_accrual }} 
+                </p>
+
+                <p>
+                    {{ form.allow_recon_accounting.errors }}
+                    {{ form.allow_recon_accounting.label_tag }} 
+                        <a id = 'allow-recon-accting-btn' class = 'pull-right'> <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span> 
+                        </a>
+                    {{ form.allow_recon_accounting }} 
+                </p> *********-->
+           <!-- Disabled <div id = 'error_message'> </div> -->
+            <!--<input type="submit" class =' btn btn-primary' name="submit" value="Submit" />
+            <p> </p>
+
+        </form>
+        </div>
+*********-->
+    {% endblock %}
+
+{% block body_block %}
+             <ul class="nav nav-tabs">
+                  <li role="presentation" class="active">
+                            <h1 style="font-size:22px; padding: 10px 0px 5px; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+                            font-weight: 500; margin: 0px 0px;"> Invoice Price Variance (IPV) Accounting </h1>
+                  </li>
+                  <li role="presentation" class = 'pull-right'><a id = 'add-field' href="#">Additional Fields</a></li>
+            </ul>
+            <!-- Additional fields block; Not displayed by default-->
+            <div class="form-inline style" id = 'add-field-form' style= 'margin: 2px 2px; display: none;'  > 
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="journal-source" value="option1" checked="checked"> Journal Source
+                        </label>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="defaults-from" value="option2"> Defaults from
+                        </label>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="accting-class" value="option3"> Accounting Class
+                        </label>
+                        <input type="submit" id = 'add-field-form-btn'  class =' btn btn-success' name="submit" value="Add/ Remove  " />
+            </div>
+
+    <div id = 'main-container'>
+        <p> </p>
+        
+        <!-- Example Scenario-->
+        <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Example Scenario</h3>
+                        </div>
+                        
+                        <div class = 'panel-body'> <span class="text-warning"> Its easier to understand IPV Accounting with a scenario. In the below example we have a Purchase Order (PO) with one line and other details are : </span>
+                        <table class ='table  table-bordered table-condensed'>
+                            <trclass ='text-center'>
+                                <th class="col-md-2 text-center" style = 'width: 10%'  > </th> 
+                                <th class="col-md-1 text-center" >Quantity</th>
+                                <th class="col-md-1 text-center">Price <small> <span class = 'text-muted'>(per unit) </span> </small> </th>
+                                <th class="col-md-1 text-center"> Amount  </th>
+                                <th class="col-md-3 text-center"> Remarks</th>
+                            </tr>
+                            <tr class ='text-center'>
+                                <td class= 'text-left'> <strong> Purchase Order </strong></td>
+                                <td> 
+                                    <div class="input-group">
+                                          <input type="number" class="form-control" id="po-qty" placeholder="Qty" value= 50 readonly>
+                                          <div class="input-group-addon">Units</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                      <div class="input-group-addon">$</div>
+                                      <input type="number" class="form-control" id="po-price" placeholder="Price" value= 10 readonly>
+                                    </div>
+                                </td>
+                                <td> 
+                                    <div class="input-group">
+                                      <div class="input-group-addon">$</div>
+                                      <input type="number" class="form-control" id="po-amount" placeholder="Amt" value= 500 readonly>
+                                    </div>
+                                </td>
+                                <td class= 'text-left' ></td>
+                            </tr>
+                            <tr class ='text-center'>
+                                <td class= 'text-left'> <strong> PO Receipt </strong></td>
+                                <td> 
+                                    <div class="input-group">
+                                            <input type="number" class="form-control" id="receipt-qty" placeholder="Qty" value= 50 readonly>
+                                            <div class="input-group-addon">Units</div>
+                                    </div>
+                                </td>
+                                <td> 
+                                    <div class="input-group">
+                                      <div class="input-group-addon">$</div>
+                                      <input type="number" class="form-control" id="receipt-price" placeholder="Price" value= 10 readonly>
+                                    </div>
+                                </td>
+                                <td>  
+                                    <div class="input-group">
+                                      <div class="input-group-addon">$</div>
+                                        <input type="number" class="form-control" id="receipt-amount" placeholder="Amt" value= 500 readonly >
+                                    </div>
+                                </td>
+                                <td class= 'text-left'>
+                                    <ul style = 'padding-left: 20px; margin-bottom: 0px'> 
+                                        <li>Assumed that complete PO quantity is received.</li>
+                                        <li> There is no option to change the price while receiving.</li>                
+                                    </ul>    
+                                </td>
+                            </tr>
+                            <tr class ='text-center'>
+                                <td class= 'text-left'> <strong> AP Invoice </strong></td>
+                                <td>
+                                    
+                                    <div class="input-group">
+                                      <input type="number" class="form-control" id="invoice-qty" placeholder="Qty" value= 50 readonly>
+                                      <div class="input-group-addon">Units</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                      <div class="input-group-addon">$</div>
+                                      <input type="number" class="form-control" id="invoice-price" placeholder="Price" value= 15 min ="0" >
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                      <div class="input-group-addon">$</div>
+                                        <input type="number" class="form-control" id="invoice-amount" placeholder="Amt" value= 750 readonly >
+                                    </div>
+                                </td>
+                                <td class= 'text-left'> 
+                                    <ul style = 'padding-left: 20px; margin-bottom: 0px'> 
+                                            <li>Assumed that complete PO quantity is invoiced.</li>
+                                            <li>Invoice Holds (Price Hold or Max Ship Amout Hold or both) may be applied based on 'Invoice Tolerance' setup</li>
+                                             
+                                    </ul>       
+                                </td>
+                            </tr>
+                        </table>
+                        <div class=' notify  ' 
+                        style =' display: none; '> 
+                        </div>
+                         <h3> IPV amount is: <span class="label label-danger" id = 'ipv-amount'style ='font-size: 14px;'>$ -50</span> </h3>
+                        <span class ='text-muted'>Accounting  and IPV Amount is automatically updated as you change the Invoice Price.</span>
+                       <!-- <input type="submit" class =' btn btn-primary center-block' name="submit" id = 'ipv-update-accting' value="Update Accounting " /> -->
+                        </div>
+
+        </div>
+        
+        <div id = 'accounting_enty'>
+            <div id = 'header'> </div>
+            <div id = 'entry'>
+                <div class="panel panel-primary">
+                
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">PO Receipt</h3>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            {% if po_receipt_accting%} 
+                                {% include "p2p/p2p_accting_header.html"%}
+                            
+                                {% for entry in po_receipt_accting %}
+                                    {% include "p2p/p2p_accting_entry.html"%}
+                                {% endfor %}
+                            {%else%} 
+                                {% include "no_accounting.html" %}  
+                            {%endif%}
+                        </table>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">PO Deliver</h3>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            {% if po_receipt_accting%} 
+                                {% include "p2p/p2p_accting_header.html"%}
+                                {% for entry in po_deliver_accting %}
+                                    {% include "p2p/p2p_accting_entry.html"%}
+                                {% endfor %}
+                            {%else%} 
+                                {% include "no_accounting.html" %}  
+                            {%endif%}
+                        </table>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">AP Invoice <small> When matched with PO/Receipt</small></h3>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            {% include "p2p/p2p_accting_header.html"%}
+                            {% for entry in ap_invoice_accting %}
+                                     {% include "p2p/p2p_accting_entry.html"%}
+                            {% endfor %}
+                            <td id = 'ipv-field' >
+                        </table>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">AP Payment</h3>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            {% include "p2p/p2p_accting_header.html"%}
+                                        {% for entry in ap_payment_accting %}
+                                                                                                {% include "p2p/p2p_accting_entry.html"%}
+                            {% endfor %}
+                        </table>
+                    </div>
+                
+                
+
+                    <!-- Period End Accrual -->
+                    <div> {% if po_pe_accrual_accting %} 
+                    <hr>
+                    <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">PO Receipt Accruals - Period End <small> For Uninvoiced Receipts</small></h3>
+                            </div>
+                            <table class="table table-bordered table-hover">
+                                    {% include "p2p/p2p_accting_header.html"%}
+                                            {% for entry in po_pe_accrual_accting %}
+                                                                        {% include "p2p/p2p_accting_entry.html"%}
+                                            {% endfor %}
+                                
+                            </table>
+                        </div>
+                        <p class="text-muted" style="padding-left:8px;"> As soon as the next period is opened, <strong> Purchasing</strong> reverses the above accrual entry.</p>
+                        {%endif%}
+                    </div> <!-- Period End Accrual Accounting Entry-->
+                </div>
+                </div>
+             </div>  
+        </div>  <!-- id =accounting_entry-->
+    </div>
+
+                        <br> <br> <hr>   
+                        <div class = 'text-center' style="position:absolute; bottom: 5px; left: 40%;" > With <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> from
+                              <br> <h4> Sai Deep Chand G 
+                                                   <a href="https://www.linkedin.com/in/saideepchandg" target="_blank"><img src="/static/images/linkedin-circle.png" width='18' height='18' alt="Linkedin Link" class="img-circle"></a>
+                                                    <!--<a href="https://twitter.com/saideep_g" target="_blank"> <img src="/static/images/twitter_circle_color.png" width='18' height='18' alt="Twitter Link" class="img-circle"></a> -->    
+                                      </h4>
+                                  <!-- <a href="https://github.com/saideepchandg" target="_blank"></a> -->    
+                                
+                        </div>
+                    
+                       
+   
+{% endblock %}
